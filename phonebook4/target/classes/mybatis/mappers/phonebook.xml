@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="phonebook">
+
+	<!-- 전체리스트 가져오기 -->
+	<select id="select" resultType="com.javaex.vo.PersonVo">
+		<![CDATA[
+		select person_id,
+		name,
+		hp,
+		company
+		from person
+		]]>
+	</select>
+
+	<!-- 삭제하기 -->
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+		delete from person
+		where person_id = #{person_id}
+		]]>
+	</delete>
+
+	<!-- 등록하기 -->
+	<insert id="insert" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			insert into person
+			values(SEQ_PERSON_ID.nextval, #{name}, #{hp}, #{company})
+		]]>
+	</insert>
+
+	<!-- 수정 (1명 데이터가져오기) -->
+	<select id="selectByNo" parameterType="int"
+		resultType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			select person_id,
+			       name,
+			       hp,
+			       company
+			from person
+			where person_id = #{person_id}
+		]]>
+	</select>
+
+	<!-- 수정하기 -->
+	<update id="update" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+		    UPDATE person
+			set name = #{name}
+			    ,hp = #{hp}
+			    ,company = #{company}
+			where person_id = #{person_id}
+		]]>
+	</update>
+
+	<!-- Map 사용법 -->
+	<insert id="insert2" parameterType="map">
+		<![CDATA[
+			insert into person
+			values(SEQ_PERSON_ID.nextval, #{name}, #{hp}, #{company})
+		]]>
+	</insert>
+
+	<!-- Map 사용법 예제2 -->
+	<!-- 1명불러오기 -->
+	<select id="selectByNo2" parameterType="int" resultType="map">
+		<![CDATA[
+		    SELECT  person_id
+					,name
+					,hp
+					,company
+			FROM person
+			where person_id = #{person_id}
+		]]>
+	</select>
+
+	<!-- resultMap 사용법 ★resultType아님 헷갈리지 말 것 -->
+	<resultMap id="resultMapPersonVo"
+		type="com.javaex.vo.PersonVo2">
+		<result column="person_id" property="personId"/>
+		<result column="name" property="name"/>
+		<result column="hp" property="hp"/>
+		<result column="company" property="company"/>
+	</resultMap>
+	<!-- 전체리스트 가져오기 -->
+	<select id="select2" resultMap="resultMapPersonVo">
+		<![CDATA[
+		select person_id,
+		name,
+		hp,
+		company
+		from person
+		]]>
+	</select>
+
+</mapper>
